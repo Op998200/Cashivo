@@ -8,7 +8,7 @@ const signupBtn = document.getElementById("signupBtn");
 const status = document.getElementById("status");
 
 // LOGIN
-loginBtn.addEventListener("click", async () => {
+loginBtn?.addEventListener("click", async () => {
   const { error } = await supabase.auth.signInWithPassword({
     email: emailInput.value,
     password: passwordInput.value,
@@ -19,5 +19,19 @@ loginBtn.addEventListener("click", async () => {
   } else {
     status.textContent = "✅ Logged in!";
     window.location.href = "dashboard.html";
+  }
+});
+
+// SIGNUP
+signupBtn?.addEventListener("click", async () => {
+  const { error } = await supabase.auth.signUp({
+    email: emailInput.value,
+    password: passwordInput.value,
+  });
+
+  if (error) {
+    status.textContent = "❌ " + error.message;
+  } else {
+    status.textContent = "✅ Check your email to confirm sign up!";
   }
 });

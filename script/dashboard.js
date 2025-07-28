@@ -1,17 +1,16 @@
+// script/dashboard.js
 import { supabase } from './supabase.js';
 
-// UI Elements
+// 🌐 DOM Elements
 const noteInput = document.getElementById("note");
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
 const addEntryBtn = document.getElementById("addEntryBtn");
-const entryList = document.getElementById("entryList");
 
+const entryList = document.getElementById("entryList");
 const totalIncome = document.getElementById("totalIncome");
 const totalExpense = document.getElementById("totalExpense");
 const balance = document.getElementById("balance");
-
-const logoutBtn = document.getElementById("logoutBtn");
 
 const imageInput = document.getElementById("imageInput");
 const uploadImageBtn = document.getElementById("uploadImageBtn");
@@ -21,21 +20,31 @@ const prevBtn = document.getElementById("prevPageBtn");
 const nextBtn = document.getElementById("nextPageBtn");
 const pageInfo = document.getElementById("pageInfo");
 
+const logoutBtn = document.getElementById("logoutBtn");
+
 let currentUser = null;
 let currentPage = 1;
 const entriesPerPage = 5;
 
-// ✅ Auth check
+// 📛 Sanitize filename
+function sanitizeFileName(originalName) {
+  const timestamp = Date.now();
+  const ext = originalName.split('.').pop().toLowerCase();
+  const base = originalName.split('.').slice(0, -1).join('.')
+    .replace(/[^a-z0-9]/gi, '_')
+    .toLowerCase()
+    .slice(0, 15);
+  return `${timestamp}_${base}.${ext}`;
+}
+
+// 🔐 Auth Check
 supabase.auth.getUser().then(({ data: { user } }) => {
-  if (!user) {
-    window.location.href = "index.html";
-  } else {
-    currentUser = user;
-    loadEntries();
-  }
+  if (!user) return window.location.href = "index.html";
+  currentUser = user;
+  loadEntries();
 });
 
-// ✅ Add Manual Entry
+// ➕ Add Manual Entry
 addEntryBtn.addEventListener("click", async () => {
   const note = noteInput.value.trim();
   const amount = parseFloat(amountInput.value);
@@ -43,25 +52,26 @@ addEntryBtn.addEventListener("click", async () => {
 
   if (!note || isNaN(amount)) return alert("❌ Enter valid note and amount");
 
+  showLoading("Saving Entry...");
   const { error } = await supabase.from("entries").insert([{
     user_id: currentUser.id,
     note,
     amount,
-    type,
+    type
   }]);
+  hideLoading();
 
-  if (error) {
-    alert("❌ Failed to add entry: " + error.message);
-  } else {
-    noteInput.value = "";
-    amountInput.value = "";
-    loadEntries(currentPage);
-  }
+  if (error) return alert("❌ Failed: " + error.message);
+
+  noteInput.value = "";
+  amountInput.value = "";
+  loadEntries(currentPage);
 });
 
-// ✅ Load Entries with Pagination & Editing
+// 📥 Load Entries
 async function loadEntries(page = 1) {
   currentPage = page;
+  showLoading("Loading entries...");
   const offset = (page - 1) * entriesPerPage;
 
   const { data, error, count } = await supabase
@@ -71,7 +81,8 @@ async function loadEntries(page = 1) {
     .order("created_at", { ascending: false })
     .range(offset, offset + entriesPerPage - 1);
 
-  if (error) return alert("❌ Error loading entries: " + error.message);
+  hideLoading();
+  if (error) return alert("❌ Load error: " + error.message);
 
   entryList.innerHTML = "";
   let income = 0, expense = 0;
@@ -84,10 +95,10 @@ async function loadEntries(page = 1) {
       <strong class="note">${entry.note || "🖼 Receipt Entry"}</strong><br>
       <span class="amount">₹${entry.amount || "--"}</span>
       <span class="type">(${entry.type})</span><br>
-      ${entry.image_url ? entry.image_url.split(',').map(url => `<img src="${url}" style="max-width:100px;">`).join(" ") : ""}
+      ${entry.image_url ? `<img src="${entry.image_url}" />` : ""}
       <br>
       <button class="editBtn">✏️ Edit</button>
-      <button class="deleteBtn" data-id="${entry.id}">🗑️ Delete</button>
+      <button class="deleteBtn">🗑️ Delete</button>
     `;
 
     const editDiv = document.createElement("div");
@@ -109,71 +120,50 @@ async function loadEntries(page = 1) {
     li.appendChild(editDiv);
     entryList.appendChild(li);
 
+    // Track totals
     if (entry.type === "income") income += entry.amount || 0;
-    else if (entry.type === "expense") expense += entry.amount || 0;
+    if (entry.type === "expense") expense += entry.amount || 0;
 
-    // Buttons
-    const editBtn = displayDiv.querySelector(".editBtn");
-    const deleteBtn = displayDiv.querySelector(".deleteBtn");
-    const saveBtn = editDiv.querySelector(".saveBtn");
-    const cancelBtn = editDiv.querySelector(".cancelBtn");
-
-    const noteField = editDiv.querySelector(".edit-note");
-    const amountField = editDiv.querySelector(".edit-amount");
-    const typeField = editDiv.querySelector(".edit-type");
-
-    editBtn.addEventListener("click", () => {
+    // Edit & Delete
+    displayDiv.querySelector(".editBtn").addEventListener("click", () => {
       displayDiv.style.display = "none";
       editDiv.style.display = "block";
     });
 
-    cancelBtn.addEventListener("click", () => {
+    editDiv.querySelector(".cancelBtn").addEventListener("click", () => {
       editDiv.style.display = "none";
       displayDiv.style.display = "block";
     });
 
-    saveBtn.addEventListener("click", async () => {
-      const updatedNote = noteField.value.trim();
-      const updatedAmount = parseFloat(amountField.value);
-      const updatedType = typeField.value;
+    editDiv.querySelector(".saveBtn").addEventListener("click", async () => {
+      const updatedNote = editDiv.querySelector(".edit-note").value.trim();
+      const updatedAmount = parseFloat(editDiv.querySelector(".edit-amount").value);
+      const updatedType = editDiv.querySelector(".edit-type").value;
 
-      if (!updatedNote || isNaN(updatedAmount)) {
-        alert("❌ Please enter valid note and amount");
-        return;
-      }
+      if (!updatedNote || isNaN(updatedAmount)) return alert("❌ Enter valid values");
 
-      const { error: updateErr } = await supabase
-        .from("entries")
-        .update({
-          note: updatedNote,
-          amount: updatedAmount,
-          type: updatedType
-        })
-        .eq("id", entry.id)
-        .eq("user_id", currentUser.id);
+      showLoading("Saving changes...");
+      const { error: updateErr } = await supabase.from("entries").update({
+        note: updatedNote,
+        amount: updatedAmount,
+        type: updatedType
+      }).eq("id", entry.id).eq("user_id", currentUser.id);
+      hideLoading();
 
-      if (updateErr) {
-        alert("❌ Update error: " + updateErr.message);
-      } else {
-        await loadEntries(currentPage); // 🔁 Reload
-      }
+      if (updateErr) return alert("❌ Update failed: " + updateErr.message);
+      loadEntries(currentPage);
     });
 
-    deleteBtn.addEventListener("click", async () => {
-      const confirmDelete = confirm("Are you sure?");
-      if (!confirmDelete) return;
-
-      const { error: deleteErr } = await supabase
-        .from("entries")
+    displayDiv.querySelector(".deleteBtn").addEventListener("click", async () => {
+      if (!confirm("Delete this entry?")) return;
+      showLoading("Deleting...");
+      const { error: deleteErr } = await supabase.from("entries")
         .delete()
         .eq("id", entry.id)
         .eq("user_id", currentUser.id);
-
-      if (deleteErr) {
-        alert("❌ Delete failed: " + deleteErr.message);
-      } else {
-        await loadEntries(currentPage); // 🔁 Reload
-      }
+      hideLoading();
+      if (deleteErr) return alert("❌ Delete failed: " + deleteErr.message);
+      loadEntries(currentPage);
     });
   });
 
@@ -187,9 +177,7 @@ async function loadEntries(page = 1) {
   nextBtn.disabled = page >= totalPages;
 }
 
-
-
-// ✅ Pagination
+// 🔁 Pagination
 prevBtn.addEventListener("click", () => {
   if (currentPage > 1) loadEntries(currentPage - 1);
 });
@@ -197,57 +185,81 @@ nextBtn.addEventListener("click", () => {
   loadEntries(currentPage + 1);
 });
 
-// ✅ Image Preview
+// 🖼 Preview images
 imageInput.addEventListener("change", () => {
   imagePreviewContainer.innerHTML = "";
   const files = imageInput.files;
-  Array.from(files).forEach(file => {
+  for (let i = 0; i < files.length; i++) {
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e) => {
       const img = document.createElement("img");
       img.src = e.target.result;
-      img.style.maxWidth = "100px";
-      img.style.margin = "5px";
       imagePreviewContainer.appendChild(img);
     };
-    reader.readAsDataURL(file);
-  });
+    reader.readAsDataURL(files[i]);
+  }
 });
 
-// ✅ Upload Images
+// ☁️ Upload Images
 uploadImageBtn.addEventListener("click", async () => {
   const files = imageInput.files;
-  if (files.length === 0) return alert("❌ Select at least one image");
+  if (!files.length) return alert("❌ Select at least one image");
 
-  let uploadedUrls = [];
-  for (let file of files) {
-    const path = `entries/${currentUser.id}/${Date.now()}_${file.name}`;
-    const { error: uploadErr } = await supabase.storage.from("images").upload(path, file);
-    if (uploadErr) return alert("❌ Upload failed: " + uploadErr.message);
+  showLoading("Uploading Images...");
 
-    const { data: urlData } = supabase.storage.from("images").getPublicUrl(path);
-    uploadedUrls.push(urlData.publicUrl);
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const safeFileName = sanitizeFileName(file.name);
+    const filePath = `entries/${currentUser.id}/${safeFileName}`;
+
+    const { error: uploadErr } = await supabase.storage.from("images").upload(filePath, file);
+    if (uploadErr) {
+      hideLoading();
+      return alert("❌ Upload failed: " + uploadErr.message);
+    }
+
+    const { data: urlData } = supabase.storage.from("images").getPublicUrl(filePath);
+
+    const { error: insertErr } = await supabase.from("entries").insert([{
+      user_id: currentUser.id,
+      note: null,
+      amount: null,
+      type: "unassigned",
+      image_url: urlData.publicUrl
+    }]);
+
+    if (insertErr) {
+      hideLoading();
+      return alert("❌ Entry failed: " + insertErr.message);
+    }
+
+    updateProgress(Math.round(((i + 1) / files.length) * 100));
+    await new Promise(res => setTimeout(res, 50)); // smooth animation
   }
 
-  const { error } = await supabase.from("entries").insert([{
-    user_id: currentUser.id,
-    note: null,
-    amount: null,
-    type: "unassigned",
-    image_url: uploadedUrls.join(",")
-  }]);
-
-  if (error) {
-    alert("❌ Failed to save entry: " + error.message);
-  } else {
-    imageInput.value = "";
-    imagePreviewContainer.innerHTML = "";
-    loadEntries(currentPage);
-  }
+  imageInput.value = "";
+  imagePreviewContainer.innerHTML = "";
+  hideLoading();
+  loadEntries(currentPage);
 });
 
-// ✅ Logout
+// 🚪 Logout
 logoutBtn.addEventListener("click", async () => {
   await supabase.auth.signOut();
   window.location.href = "index.html";
 });
+
+// ⏳ Loading Functions
+function showLoading(text = "Loading...") {
+  document.getElementById("loadingText").textContent = text;
+  document.getElementById("progressFill").style.width = "0%";
+  document.getElementById("loadingPopup").style.display = "flex";
+}
+
+function updateProgress(percent) {
+  document.getElementById("progressFill").style.width = percent + "%";
+}
+
+function hideLoading() {
+  document.getElementById("loadingPopup").style.display = "none";
+}

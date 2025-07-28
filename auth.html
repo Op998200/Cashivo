@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Cashivo Login</title>
   <link rel="stylesheet" href="style/style.css" />
 </head>
-
 <body>
   <div class="auth-container">
     <h2>🔐 Cashivo Login</h2>
@@ -21,10 +19,17 @@
       <button id="loginBtn">Login</button>
       <button id="signupBtn">Signup</button>
     </div>
-
   </div>
+
+  <!-- 🔄 Loading Popup -->
+  <div class="loading-popup" id="loadingPopup" style="display: none;">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p>Processing...</p>
+    </div>
+  </div>
+
   <script type="module" src="script/supabase.js"></script>
   <script type="module" src="script/auth.js"></script>
 </body>
-
 </html>

@@ -1,39 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cashivo Dashboard</title>
   <link rel="stylesheet" href="style/style.css" />
 </head>
+
 <body>
   <div class="dashboard-container">
-    <h2>Cashivo Dashboard</h2>
+    <h2>💼 Cashivo – Your Personal Finance Tracker</h2>
+
+    <!-- 💰 Totals -->
     <div class="totals">
       <p>Total Income: ₹<span id="totalIncome">0</span></p>
       <p>Total Expense: ₹<span id="totalExpense">0</span></p>
+      <p>💵 Balance: ₹<span id="balance">0</span></p>
     </div>
+
+    <!-- ➕ Manual Entry -->
     <div class="entry-form">
-      <input type="text" id="note" placeholder="Note" />
-      <input type="number" id="amount" placeholder="Amount" />
+      <input type="text" id="note" placeholder="Note (e.g. Salary, Rent)" />
+      <input type="number" id="amount" placeholder="Amount (₹)" />
       <select id="type">
         <option value="income">Income</option>
         <option value="expense">Expense</option>
       </select>
-      <button id="addEntryBtn">Add Entry</button>
+      <button id="addEntryBtn">➕ Add Entry</button>
     </div>
+
+    <!-- 📜 Entry List -->
+    <h3>📋 All Entries</h3>
     <ul id="entryList"></ul>
-    <hr />
-    <div class="image-entry-form">
-      <input type="file" id="imageInput" />
-      <input type="text" id="imageComment" placeholder="Comment (e.g. Shoes ₹1200)" />
-      <select id="imageType">
-        <option value="expense">Expense</option>
-        <option value="income">Income</option>
-      </select>
-      <button id="uploadImageBtn">Upload Image Entry</button>
+
+    <!-- 🔁 Pagination -->
+    <div style="text-align: center; margin-top: 1rem;">
+      <button id="prevPageBtn">⬅️ Prev</button>
+      <span id="pageInfo">Page 1</span>
+      <button id="nextPageBtn">Next ➡️</button>
     </div>
-    <button id="logoutBtn" class="logout">Logout</button>
+
+    <!-- 📷 Image Upload -->
+    <h3>🖼 Upload Bill / Receipt Images</h3>
+    <div class="image-entry-form">
+      <input type="file" id="imageInput" accept="image/*" multiple />
+      <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
+      <button id="uploadImageBtn">📤 Upload Images</button>
+    </div>
+
+    <hr />
+
+    <!-- 🚪 Logout -->
+    <button id="logoutBtn" class="logout">🚪 Logout</button>
   </div>
+
+  <!-- Scripts -->
   <script type="module" src="script/supabase.js"></script>
   <script type="module" src="script/dashboard.js"></script>
 </body>
+
 </html>

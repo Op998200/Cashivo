@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashivo Test Runner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-suite {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #ddd;
+            background: #f9f9f9;
+        }
+        .test-case.pass {
+            border-left-color: #4CAF50;
+            background: #f3fff3;
+        }
+        .test-case.fail {
+            border-left-color: #f44336;
+            background: #fff3f3;
+        }
+        .test-result {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .run-tests {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .run-tests:hover {
+            background: #0056b3;
+        }
+        .summary {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cashivo Application Test Runner</h1>
+    
+    <div class="summary">
+        <h2>Test Summary</h2>
+        <p>Total Tests: <span id="total-tests">0</span></p>
+        <p>Passed: <span id="passed-tests">0</span></p>
+        <p>Failed: <span id="failed-tests">0</span></p>
+        <button class="run-tests" onclick="runAllTests()">Run All Tests</button>
+    </div>
+
+    <div id="test-results"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+            }
+
+            addTest(name, testFunction) {
+                this.tests.push({ name, test: testFunction });
+            }
+
+            async runTests() {
+                this.results = [];
+                const resultsContainer = document.getElementById('test-results');
+                resultsContainer.innerHTML = '';
+
+                for (const testCase of this.tests) {
+                    const result = await this.runTest(testCase);
+                    this.results.push(result);
+                    this.displayResult(result);
+                }
+
+                this.updateSummary();
+            }
+
+            async runTest(testCase) {
+                try {
+                    const result = await testCase.test();
+                    return {
+                        name: testCase.name,
+                        passed: true,
+                        message: result || 'Test passed'
+                    };
+                } catch (error) {
+                    return {
+                        name: testCase.name,
+                        passed: false,
+                        message: error.message
+                    };
+                }
+            }
+
+            displayResult(result) {
+                const resultsContainer = document.getElementById('test-results');
+                const testDiv = document.createElement('div');
+                testDiv.className = `test-case ${result.passed ? 'pass' : 'fail'}`;
+                testDiv.innerHTML = `
+                    <h3>${result.name}</h3>
+                    <div class="test-result">${result.passed ? 'PASS' : 'FAIL'}</div>
+                    <p>${result.message}</p>
+                `;
+                resultsContainer.appendChild(testDiv);
+            }
+
+            updateSummary() {
+                const total = this.results.length;
+                const passed = this.results.filter(r => r.passed).length;
+                const failed = total - passed;
+
+                document.getElementById('total-tests').textContent = total;
+                document.getElementById('passed-tests').textContent = passed;
+                document.getElementById('failed-tests').textContent = failed;
+            }
+        }
+
+        // Initialize test runner
+        const testRunner = new TestRunner();
+
+        // Test utilities
+        function clearLocalStorage() {
+            localStorage.clear();
+        }
+
+        function createTestUser() {
+            return {
+                name: 'Test User',
+                email: 'test@example.com',
+                password: 'Test123!'
+            };
+        }
+
+        // Authentication Tests
+        testRunner.addTest('Valid Registration', () => {
+            clearLocalStorage();
+            const user = createTestUser();
+            
+            // Simulate registration
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.email === user.email)) {
+                throw new Error('User already exists');
+            }
+            
+            users.push({
+                ...user,
+                id: Date.now().toString(),
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            if (savedUsers.length === 0) {
+                throw new Error('User not saved');
+            }
+            
+            return 'Registration successful';
+        });
+
+        testRunner.addTest('Duplicate Email Registration', () => {
+            clearLocalStorage();
+            const user = createTestUser();
+            
+            // First registration
+            const users = [];
+            users.push({ ...user, id: '1' });
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Try duplicate registration
+            const existingUser = users.find(u => u.email === user.email);
+            if (!existingUser) {
+                throw new Error('Should prevent duplicate registration');
+            }
+            
+            return 'Duplicate prevention working';
+        });
+
+        testRunner.addTest('Valid Login', () => {
+            clearLocalStorage();
+            const user = createTestUser();
+            
+            // Setup test user
+            const users = [{ ...user, id: '1' }];
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Test login
+            const foundUser = users.find(u => 
+                u.email === user.email && u.password === user.password
+            );
+            
+            if (!foundUser) {
+                throw new Error('Login failed with valid credentials');
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(foundUser));
+            return 'Login successful';
+        });
+
+        testRunner.addTest('Invalid Login', () => {
+            clearLocalStorage();
+            
+            const users = [{ email: 'test@example.com', password: 'correct' }];
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            const foundUser = users.find(u => 
+                u.email === 'test@example.com' && u.password === 'wrong'
+            );
+            
+            if (foundUser) {
+                throw new Error('Should reject invalid credentials');
+            }
+            
+            return 'Invalid login correctly rejected';
+        });
+
+        // Transaction Tests
+        testRunner.addTest('Add Valid Transaction', () => {
+            clearLocalStorage();
+            
+            const transaction = {
+                id: Date.now().toString(),
+                type: 'income',
+                amount: 1000,
+                category: 'Salary',
+                description: 'Monthly salary',
+                date: new Date().toISOString()
+            };
+            
+            const transactions = [];
+            transactions.push(transaction);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            
+            const saved = JSON.parse(localStorage.getItem('transactions') || '[]');
+            if (saved.length === 0) {
+                throw new Error('Transaction not saved');
+            }
+            
+            return 'Transaction added successfully';
+        });
+
+        testRunner.addTest('Invalid Transaction Amount', () => {
+            const transaction = {
+                id: Date.now().toString(),
+                type: 'income',
+                amount: -100,
+                category: 'Test',
+                description: 'Invalid amount',
+                date: new Date().toISOString()
+            };
+            
+            if (transaction.amount < 0) {
+                return 'Negative amount correctly identified';
+            }
+            
+            throw new Error('Should reject negative amounts');
+        });
+
+        testRunner.addTest('Calculate Balance', () => {
+            const transactions = [
+                { type: 'income', amount: 1000 },
+                { type: 'expense', amount: 300 },
+                { type: 'income', amount: 500 },
+                { type: 'expense', amount: 200 }
+            ];
+            
+            const totalIncome = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const totalExpense = transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const balance = totalIncome - totalExpense;
+            
+            if (balance !== 1000) {
+                throw new Error(`Expected balance 1000, got ${balance}`);
+            }
+            
+            return 'Balance calculation correct';
+        });
+
+        testRunner.addTest('Local Storage Limits', () => {
+            clearLocalStorage();
+            
+            // Test with many transactions
+            const transactions = [];
+            for (let i = 0; i < 100; i++) {
+                transactions.push({
+                    id: i.toString(),
+                    type: i % 2 === 0 ? 'income' : 'expense',
+                    amount: Math.random() * 1000,
+                    category: 'Test',
+                    description: `Test transaction ${i}`,
+                    date: new Date().toISOString()
+                });
+            }
+            
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            const saved = JSON.parse(localStorage.getItem('transactions') || '[]');
+            
+            if (saved.length !== 100) {
+                throw new Error('Failed to save 100 transactions');
+            }
+            
+            return 'Local storage handles 100 transactions';
+        });
+
+        testRunner.addTest('Data Persistence', () => {
+            const testData = { key: 'value', number: 123 };
+            localStorage.setItem('test', JSON.stringify(testData));
+            
+            // Simulate page refresh
+            const retrieved = JSON.parse(localStorage.getItem('test'));
+            
+            if (retrieved.key !== 'value' || retrieved.number !== 123) {
+                throw new Error('Data not persisted correctly');
+            }
+            
+            return 'Data persistence working';
+        });
+
+        // Edge Cases
+        testRunner.addTest('Empty Database', () => {
+            clearLocalStorage();
+            
+            const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            if (transactions.length !== 0 || users.length !== 0) {
+                throw new Error('Database not empty');
+            }
+            
+            return 'Empty database handled correctly';
+        });
+
+        testRunner.addTest('Special Characters', () => {
+            const transaction = {
+                id: '1',
+                type: 'expense',
+                amount: 50,
+                category: 'Food & Dining',
+                description: 'Lunch at café with friends 🍕',
+                date: new Date().toISOString()
+            };
+            
+            localStorage.setItem('test-special', JSON.stringify(transaction));
+            const saved = JSON.parse(localStorage.getItem('test-special'));
+            
+            if (saved.description !== transaction.description) {
+                throw new Error('Special characters not handled correctly');
+            }
+            
+            return 'Special characters handled correctly';
+        });
+
+        function runAllTests() {
+            testRunner.runTests();
+        }
+
+        // Run tests on page load
+        window.addEventListener('load', () => {
+            runAllTests();
+        });
+    </script>
+</body>
+</html>

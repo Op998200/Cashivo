@@ -1,0 +1,32 @@
+{
+  "name": "cashivo",
+  "version": "2.0.0",
+  "description": "Personal Finance Tracker - A modern web application for managing personal finances",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . --port 3000",
+    "build": "echo 'No build step required for static site'",
+    "preview": "npx serve ."
+  },
+  "keywords": [
+    "finance",
+    "budget",
+    "tracker",
+    "personal-finance",
+    "web-app"
+  ],
+  "author": "Cashivo Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/cashivo-v2.git"
+  },
+  "homepage": "https://yourusername.github.io/cashivo-v2",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

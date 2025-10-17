@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Cashivo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="profile-page">
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Cashivo</h2>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="budgets.html" class="nav-link">Budgets</a></li>
+                    <li><a href="recurring.html" class="nav-link">Recurring</a></li>
+                    <li><a href="analytics.html" class="nav-link">Analytics</a></li>
+                    <li><a href="profile.html" class="nav-link active">Profile</a></li>
+                </ul>
+            </div>
+            <div class="nav-user">
+                <div class="user-menu">
+                    <button class="user-button" id="user-menu-button">
+                        <div class="user-avatar">
+                            <span id="user-initial">U</span>
+                        </div>
+                        <span id="user-email" class="user-email">user@example.com</span>
+                        <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </button>
+                    <div class="user-dropdown" id="user-dropdown" style="display: none;">
+                        <a href="profile.html" class="dropdown-item">
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Profile Header -->
+            <header class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <img id="profile-avatar-img" src="" alt="User Avatar" style="display: none;" />
+                        <span id="profile-initial">U</span>
+                        <button class="edit-avatar-btn" id="edit-avatar-btn" title="Change Avatar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" style="transform: scale(1.2);">
+                                <path fill="currentColor" d="M4,5H7L9,3H15L17,5H20A2,2 0 0,1 22,7V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V7A2,2 0 0,1 4,5M7,8A5,5 0 0,0 2,13A5,5 0 0,0 7,18A5,5 0 0,0 12,13A5,5 0 0,0 7,8M7,10A3,3 0 0,1 10,13A3,3 0 0,1 7,16A3,3 0 0,1 4,13A3,3 0 0,1 7,10Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="profile-details">
+                        <div class="profile-name-container">
+                            <h1 id="profile-email">username</h1>
+                            <button class="edit-username-btn" id="edit-username-btn" title="Edit Username">
+                                <svg width="14" height="14" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="member-since">Member since <span id="member-date">--</span></p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="profile-transactions">0</span>
+                        <span class="stat-label">Transactions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="profile-categories">0</span>
+                        <span class="stat-label">Categories Used</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="profile-days">0</span>
+                        <span class="stat-label">Days Active</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Profile Content Grid -->
+            <div class="profile-grid">
+                <!-- Account Settings -->
+                <section class="profile-section">
+                    <div class="section-card">
+                        <header class="section-header">
+                            <h2>Account Settings</h2>
+                            <p>Manage your account information and security</p>
+                        </header>
+                        
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Email Address</h3>
+                                    <p id="current-email">user@example.com</p>
+                                    <small class="form-hint text-muted">Email cannot be changed for security reasons</small>
+                                </div>
+                                <span class="setting-status read-only">Read Only</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Password</h3>
+                                    <p>Last changed: <span id="password-last-changed">--</span></p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="change-password-btn">Change</button>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Two-Factor Authentication</h3>
+                                    <p class="security-status disabled">Not enabled</p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="setup-2fa-btn" disabled>Setup</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data & Privacy -->
+                <section class="profile-section">
+                    <div class="section-card">
+                        <header class="section-header">
+                            <h2>Data & Privacy</h2>
+                            <p>Control your data and privacy settings</p>
+                        </header>
+                        
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Export Data</h3>
+                                    <p>Download all your transaction data as CSV</p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="export-data-btn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                    </svg>
+                                    Export
+                                </button>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Data Backup</h3>
+                                    <p>Last backup: <span id="last-backup">--</span></p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="backup-data-btn" disabled>
+                                    Backup Now
+                                </button>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Account Deletion</h3>
+                                    <p>Permanently delete your account and all data</p>
+                                </div>
+                                <button class="btn btn-danger btn-sm" id="delete-account-btn">Delete Account</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Preferences -->
+                <section class="profile-section">
+                    <div class="section-card">
+                        <header class="section-header">
+                            <h2>Preferences</h2>
+                            <p>Customize your Cashivo experience</p>
+                        </header>
+                        
+                        <div class="preferences-form">
+                            <div class="form-group">
+                                <label for="currency-select">Default Currency</label>
+                                <select id="currency-select" class="select-input">
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                    <option value="GBP">British Pound (£)</option>
+                                    <option value="CAD">Canadian Dollar (C$)</option>
+                                    <option value="AUD">Australian Dollar (A$)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="date-format-select">Date Format</label>
+                                <select id="date-format-select" class="select-input">
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="notifications-enabled">
+                                    <span class="checkmark"></span>
+                                    Email Notifications (Coming Soon)
+                                </label>
+                                <small class="form-hint">Get notified about spending summaries and insights</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="dark-mode-enabled">
+                                    <span class="checkmark"></span>
+                                    Dark Mode (Coming Soon)
+                                </label>
+                                <small class="form-hint">Switch between light and dark themes</small>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="save-preferences-btn">
+                                <span class="btn-text">Save Preferences</span>
+                                <span class="btn-loader" style="display: none;">
+                                    <div class="spinner"></div>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Account Summary -->
+                <section class="profile-section">
+                    <div class="section-card">
+                        <header class="section-header">
+                            <h2>Account Summary</h2>
+                            <p>Overview of your account activity</p>
+                        </header>
+                        
+                        <div class="summary-stats">
+                            <div class="summary-item">
+                                <div class="summary-icon">📊</div>
+                                <div class="summary-content">
+                                    <h4>Total Tracked</h4>
+                                    <p class="summary-value" id="total-tracked">$0.00</p>
+                                    <small>All time</small>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <div class="summary-icon">📸</div>
+                                <div class="summary-content">
+                                    <h4>Receipts Stored</h4>
+                                    <p class="summary-value" id="receipts-stored">0</p>
+                                    <small>Images uploaded</small>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <div class="summary-icon">📈</div>
+                                <div class="summary-content">
+                                    <h4>Top Category</h4>
+                                    <p class="summary-value" id="top-category">--</p>
+                                    <small id="top-category-amount">$0.00</small>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <div class="summary-icon">📅</div>
+                                <div class="summary-content">
+                                    <h4>Most Active Day</h4>
+                                    <p class="summary-value" id="most-active-day">--</p>
+                                    <small id="active-day-count">0 transactions</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Logout Section -->
+            <section class="logout-section">
+                <div class="logout-card">
+                    <div class="logout-content">
+                        <h3>Ready to sign out?</h3>
+                        <p>You can always sign back in to access your financial data.</p>
+                        <button class="btn btn-secondary" id="logout-button">
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19Z"/>
+                            </svg>
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Change Password Modal -->
+    <div id="password-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Password</h3>
+                <button class="modal-close" id="close-password-modal">&times;</button>
+            </div>
+            <form id="change-password-form">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <div class="password-input-container">
+                        <input 
+                            type="password" 
+                            id="current-password" 
+                            name="currentPassword" 
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="password-toggle" data-target="current-password">
+                            <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"/>
+                            </svg>
+                            <svg class="eye-off-icon" style="display: none;" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.09L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.76,7.13 11.38,7 12,7Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <div class="password-input-container">
+                        <input 
+                            type="password" 
+                            id="new-password" 
+                            name="newPassword" 
+                            required
+                            minlength="6"
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="password-toggle" data-target="new-password">
+                            <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"/>
+                            </svg>
+                            <svg class="eye-off-icon" style="display: none;" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.09L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.76,7.13 11.38,7 12,7Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <small class="form-hint">Must be at least 6 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-new-password">Confirm New Password</label>
+                    <div class="password-input-container">
+                        <input 
+                            type="password" 
+                            id="confirm-new-password" 
+                            name="confirmNewPassword" 
+                            required
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="password-toggle" data-target="confirm-new-password">
+                            <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"/>
+                            </svg>
+                            <svg class="eye-off-icon" style="display: none;" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.09L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.76,7.13 11.38,7 12,7Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-password-change">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Update Password</span>
+                        <span class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Username Modal -->
+    <div id="edit-username-modal" class="modal" style="display: none;">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Edit Username</h3>
+                <button class="modal-close" id="close-edit-username-modal">&times;</button>
+            </div>
+            <form id="edit-username-form">
+                <div class="form-group">
+                    <label for="edit-username">New Username</label>
+                    <input
+                        type="text"
+                        id="edit-username"
+                        name="username"
+                        required
+                        minlength="3"
+                        maxlength="30"
+                        placeholder="Enter new username"
+                        autocomplete="username"
+                    >
+                    <small class="form-hint">3-30 characters, letters, numbers, and underscores only</small>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-username">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Update Username</span>
+                        <span class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Avatar Modal -->
+    <div id="edit-avatar-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Avatar</h3>
+                <button class="modal-close" id="close-edit-avatar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-upload-section">
+                    <div class="current-avatar-preview" style="position: relative;">
+                        <img id="current-avatar-preview" src="" alt="" style="display: none;" />
+                        <span id="current-avatar-initial">U</span>
+                    </div>
+                    <div class="avatar-upload-controls">
+                        <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" id="choose-avatar-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                            </svg>
+                            Choose Image
+                        </button>
+                        <button type="button" class="btn btn-outline" id="remove-avatar-btn" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+                            </svg>
+                            Remove Avatar
+                        </button>
+                    </div>
+                    <div class="avatar-preview-section" style="display: none;">
+                        <h4>Preview</h4>
+                        <div class="new-avatar-preview">
+                            <img id="new-avatar-preview" src="" alt="Avatar preview" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancel-edit-avatar">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-avatar-btn" disabled>
+                    <span class="btn-text">Save Avatar</span>
+                    <span class="btn-loader" style="display: none;">
+                        <div class="spinner"></div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-account-modal" class="modal" style="display: none;">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Delete Account</h3>
+                <button class="modal-close" id="close-delete-account-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-content">
+                        <h4>This action cannot be undone</h4>
+                        <p>Deleting your account will permanently remove:</p>
+                        <ul>
+                            <li>All your financial transactions</li>
+                            <li>Uploaded receipt images</li>
+                            <li>Analytics and insights data</li>
+                            <li>Account settings and preferences</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="delete-confirmation">Type "DELETE" to confirm:</label>
+                    <input
+                        type="text"
+                        id="delete-confirmation"
+                        name="confirmation"
+                        placeholder="DELETE"
+                        autocomplete="off"
+                    >
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancel-account-deletion">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-account-deletion" disabled>
+                    <span class="btn-text">Delete Account</span>
+                    <span class="btn-loader" style="display: none;">
+                        <div class="spinner"></div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="js/profile.js"></script>
+</body>
+</html>

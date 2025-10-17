@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Cashivo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Cashivo</h2>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                    <li><a href="budgets.html" class="nav-link">Budgets</a></li>
+                    <li><a href="recurring.html" class="nav-link">Recurring</a></li>
+                    <li><a href="analytics.html" class="nav-link">Analytics</a></li>
+                    <li><a href="profile.html" class="nav-link">Profile</a></li>
+                </ul>
+            </div>
+            <div class="nav-user">
+                <div class="user-menu">
+                    <button class="user-button" id="user-menu-button">
+                        <div class="user-avatar">
+                            <span id="user-initial">U</span>
+                        </div>
+                        <span id="user-email" class="user-email">user@example.com</span>
+                        <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </button>
+                    <div class="user-dropdown" id="user-dropdown" style="display: none;">
+                        <a href="profile.html" class="dropdown-item">
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+                <div class="header-content">
+                    <h1>Welcome back, <span id="user-name">User</span></h1>
+                    <p class="header-subtitle">Track your finances and stay on top of your spending</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="export-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        </svg>
+                        Export
+                    </button>
+                </div>
+            </header>
+
+            <!-- Financial Overview Cards -->
+            <section class="financial-overview">
+                <div class="overview-cards">
+                    <div class="overview-card income-card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,17L7,12H10V8H14V12H17L12,17Z"/>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Income</h3>
+                            <p class="amount" id="total-income">$0.00</p>
+                            <small class="change positive" id="income-change">+0% from last month</small>
+                        </div>
+                    </div>
+                    
+                    <div class="overview-card expense-card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7L17,12H14V16H10V12H7L12,7Z"/>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Expenses</h3>
+                            <p class="amount" id="total-expenses">$0.00</p>
+                            <small class="change negative" id="expense-change">+0% from last month</small>
+                        </div>
+                    </div>
+                    
+                    <div class="overview-card balance-card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9Z"/>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Current Balance</h3>
+                            <p class="amount" id="current-balance">$0.00</p>
+                            <small class="change neutral" id="balance-change">Net income this month</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Transaction Entry Form -->
+                <section class="entry-section">
+                    <div class="section-card">
+                        <header class="section-header">
+                            <h2>Add Transaction</h2>
+                            <p>Record a new income or expense</p>
+                        </header>
+                        
+                        <form id="transaction-form" class="transaction-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="transaction-type">Type</label>
+                                    <select id="transaction-type" name="type" required>
+                                        <option value="expense">Expense</option>
+                                        <option value="income">Income</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="transaction-amount">Amount ($)</label>
+                                    <input 
+                                        type="number" 
+                                        id="transaction-amount" 
+                                        name="amount" 
+                                        step="0.01" 
+                                        min="0" 
+                                        required 
+                                        placeholder="0.00"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="transaction-category">Category</label>
+                                    <select id="transaction-category" name="category" required>
+                                        <option value="">Select category</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="transaction-date">Date</label>
+                                    <input 
+                                        type="date" 
+                                        id="transaction-date" 
+                                        name="date" 
+                                        required
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="transaction-note">Note (Optional)</label>
+                                <input 
+                                    type="text" 
+                                    id="transaction-note" 
+                                    name="note" 
+                                    placeholder="Add a description or note"
+                                    maxlength="255"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="transaction-receipt">Receipt (Optional)</label>
+                                <div class="file-input-container">
+                                    <input 
+                                        type="file" 
+                                        id="transaction-receipt" 
+                                        name="receipt" 
+                                        accept="image/*"
+                                        class="file-input"
+                                    >
+                                    <label for="transaction-receipt" class="file-input-label">
+                                        <svg width="20" height="20" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                        <span class="file-text">Choose file or drag here</span>
+                                    </label>
+                                    <div class="file-preview" id="file-preview" style="display: none;">
+                                        <img id="preview-image" src="" alt="Receipt preview">
+                                        <button type="button" class="remove-file" id="remove-file">×</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-full">
+                                <span class="btn-text">Add Transaction</span>
+                                <span class="btn-loader" style="display: none;">
+                                    <div class="spinner"></div>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Recent Transactions -->
+                <section class="transactions-section">
+                    <div class="section-card">
+                        <header class="section-header">
+                            <div>
+                                <h2>Recent Transactions</h2>
+                                <p id="transactions-count">0 transactions</p>
+                            </div>
+                            <div class="header-actions">
+                                <div class="search-container">
+                                    <input 
+                                        type="text" 
+                                        id="transaction-search" 
+                                        placeholder="Search transactions..."
+                                        class="search-input"
+                                    >
+                                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L20.71,20L19.29,21.42L13.73,15.44C12.59,16.41 11.11,17 9.5,17A6.5,6.5 0 0,1 3,10.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"/>
+                                    </svg>
+                                </div>
+                                <select id="filter-type" class="filter-select">
+                                    <option value="all">All Types</option>
+                                    <option value="income">Income</option>
+                                    <option value="expense">Expenses</option>
+                                </select>
+                            </div>
+                        </header>
+                        
+                        <!-- Transactions Table -->
+                        <div class="transactions-container">
+                            <div class="transactions-table-container">
+                                <table class="transactions-table" id="transactions-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Category</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                            <th>Receipt</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transactions-tbody">
+                                        <!-- Transactions will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Empty State -->
+                            <div class="empty-state" id="empty-state" style="display: none;">
+                                <div class="empty-icon">📊</div>
+                                <h3>No transactions yet</h3>
+                                <p>Add your first transaction to get started with tracking your finances.</p>
+                            </div>
+                            
+                            <!-- Loading State -->
+                            <div class="loading-state" id="loading-state" style="display: none;">
+                                <div class="spinner"></div>
+                                <p>Loading transactions...</p>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination" id="pagination" style="display: none;">
+                            <button class="pagination-btn" id="prev-page" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/>
+                                </svg>
+                                Previous
+                            </button>
+                            <span class="pagination-info" id="pagination-info">Page 1 of 1</span>
+                            <button class="pagination-btn" id="next-page" disabled>
+                                Next
+                                <svg width="16" height="16" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Transaction Modal -->
+    <div id="edit-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Transaction</h3>
+                <button class="modal-close" id="close-edit-modal">&times;</button>
+            </div>
+            <form id="edit-transaction-form" class="transaction-form">
+                <input type="hidden" id="edit-transaction-id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-transaction-type">Type</label>
+                        <select id="edit-transaction-type" name="type" required>
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-transaction-amount">Amount ($)</label>
+                        <input 
+                            type="number" 
+                            id="edit-transaction-amount" 
+                            name="amount" 
+                            step="0.01" 
+                            min="0" 
+                            required 
+                            placeholder="0.00"
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-transaction-category">Category</label>
+                        <select id="edit-transaction-category" name="category" required>
+                            <option value="">Select category</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-transaction-date">Date</label>
+                        <input 
+                            type="date" 
+                            id="edit-transaction-date" 
+                            name="date" 
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-transaction-note">Note (Optional)</label>
+                    <input 
+                        type="text" 
+                        id="edit-transaction-note" 
+                        name="note" 
+                        placeholder="Add a description or note"
+                        maxlength="255"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-transaction-receipt">Receipt (Optional)</label>
+                    <div class="file-input-container">
+                        <input 
+                            type="file" 
+                            id="edit-transaction-receipt" 
+                            name="receipt" 
+                            accept="image/*"
+                            class="file-input"
+                        >
+                        <label for="edit-transaction-receipt" class="file-input-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                            </svg>
+                            <span class="file-text">Choose file or drag here</span>
+                        </label>
+                        <div class="file-preview" id="edit-file-preview" style="display: none;">
+                            <img id="edit-preview-image" class="preview-image" alt="Receipt preview">
+                            <button type="button" class="remove-file" id="edit-remove-file">&times;</button>
+                        </div>
+                        <div class="current-receipt" id="edit-current-receipt" style="display: none;">
+                            <p>Current receipt:</p>
+                            <a href="#" target="_blank" id="edit-current-receipt-link">📄 View current receipt</a>
+                            <button type="button" class="btn btn-sm btn-danger" id="edit-remove-current-receipt">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-edit">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Update Transaction</span>
+                        <span class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal" style="display: none;">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Delete Transaction</h3>
+                <button class="modal-close" id="close-delete-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this transaction? This action cannot be undone.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancel-delete">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete">
+                    <span class="btn-text">Delete</span>
+                    <span class="btn-loader" style="display: none;">
+                        <div class="spinner"></div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

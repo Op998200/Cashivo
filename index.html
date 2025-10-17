@@ -3,48 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            text-align: center;
-        }
-        .container {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .csh{
-            color: #ded38e;
-            margin-bottom: 6px;
-            font-size: 50px;
-            font-weight: 600;
-        }
-        h1 {
-            color: #007bff;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-    </style>
+    <title>Cashivo - Track Smarter. Spend Better.</title>
+    <meta name="description" content="A modern, minimal finance tracker for recording income, expenses, and storing receipts with AI insights.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1 class="csh">Cashivo<h1>
-        <h1>We're Launching Soon!</h1>
-        <p>Our new website is currently under construction and will be available shortly.</p>
-        <p>Stay tuned for exciting updates!</p>
-        <!-- Optional: Add a countdown timer or email subscription form here -->
-    </div>
+<body class="landing-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Cashivo</h2>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="auth.html" class="nav-link">Login</a></li>
+                    <li><a href="auth.html?signup=true" class="btn btn-primary">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Track Smarter.<br>Spend Better.</h1>
+                <p class="hero-subtitle">Take control of your finances with our modern, minimal finance tracker. Record income and expenses, upload receipts, and gain valuable insights into your spending habits.</p>
+                <div class="hero-buttons">
+                    <a href="auth.html?signup=true" class="btn btn-primary btn-large">Get Started Free</a>
+                    <a href="#features" class="btn btn-secondary btn-large">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="dashboard-preview">
+                    <div class="preview-header">
+                        <div class="preview-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="preview-title">Cashivo Dashboard</div>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-stats">
+                            <div class="stat-card income">
+                                <span class="stat-label">Income</span>
+                                <span class="stat-value">$5,240</span>
+                            </div>
+                            <div class="stat-card expense">
+                                <span class="stat-label">Expenses</span>
+                                <span class="stat-value">$3,180</span>
+                            </div>
+                            <div class="stat-card balance">
+                                <span class="stat-label">Balance</span>
+                                <span class="stat-value">$2,060</span>
+                            </div>
+                        </div>
+                        <div class="preview-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything you need to manage your finances</h2>
+                <p>Powerful features designed to make expense tracking simple and insightful</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Track Income & Expenses</h3>
+                    <p>Easily record and categorize all your financial transactions in one place with our intuitive interface.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📸</div>
+                    <h3>Upload Receipts</h3>
+                    <p>Capture and store receipt images for your transactions. Never lose track of your important purchases again.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Financial Analytics</h3>
+                    <p>Visualize your spending patterns with interactive charts and gain insights into your financial habits.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Private</h3>
+                    <p>Your financial data is encrypted and secure. We prioritize your privacy and data protection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Responsive</h3>
+                    <p>Access your finances anywhere, anytime. Our app works perfectly on desktop, tablet, and mobile devices.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Insights</h3>
+                    <p class="coming-soon">Coming Soon: Get personalized financial insights and recommendations powered by AI.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Simple. Modern. Effective.</h2>
+                    <p>Cashivo is designed for individuals who want to take control of their finances without the complexity of traditional budgeting apps. Our clean, dark-themed interface focuses on what matters most: tracking your money efficiently.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <span class="checkmark">✓</span>
+                            <span>No monthly fees or subscriptions</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="checkmark">✓</span>
+                            <span>Unlimited transactions and categories</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="checkmark">✓</span>
+                            <span>Export your data anytime</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="checkmark">✓</span>
+                            <span>Bank-level security</span>
+                        </div>
+                    </div>
+                    <a href="auth.html?signup=true" class="btn btn-primary btn-large">Start Tracking Today</a>
+                </div>
+                <div class="about-image">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="mobile-app">
+                                <div class="mobile-header">Cashivo</div>
+                                <div class="mobile-stats">
+                                    <div class="mobile-stat">
+                                        <div class="mobile-amount income">+$1,200</div>
+                                        <div class="mobile-label">This month</div>
+                                    </div>
+                                </div>
+                                <div class="mobile-transactions">
+                                    <div class="mobile-transaction">
+                                        <span class="transaction-category">🍕 Food</span>
+                                        <span class="transaction-amount">-$25.99</span>
+                                    </div>
+                                    <div class="mobile-transaction">
+                                        <span class="transaction-category">💼 Salary</span>
+                                        <span class="transaction-amount">+$3,200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Cashivo</h3>
+                    <p>Track Smarter. Spend Better.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="auth.html">Sign Up</a></li>
+                            <li><a href="auth.html">Log In</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Cashivo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
 </body>
 </html>

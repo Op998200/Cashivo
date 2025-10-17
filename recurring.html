@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recurring Transactions - Cashivo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="recurring-page">
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Cashivo</h2>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="budgets.html" class="nav-link">Budgets</a></li>
+                    <li><a href="recurring.html" class="nav-link active">Recurring</a></li>
+                    <li><a href="analytics.html" class="nav-link">Analytics</a></li>
+                    <li><a href="profile.html" class="nav-link">Profile</a></li>
+                </ul>
+            </div>
+            <div class="nav-user">
+                <div class="user-menu">
+                    <button class="user-button" id="user-menu-button">
+                        <div class="user-avatar">
+                            <span id="user-initial">U</span>
+                        </div>
+                        <span id="user-email" class="user-email">user@example.com</span>
+                        <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                        </svg>
+                    </button>
+                    <div class="user-dropdown" id="user-dropdown" style="display: none;">
+                        <a href="profile.html" class="dropdown-item">
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Recurring Header -->
+            <header class="page-header">
+                <div class="header-content">
+                    <h1>Recurring Transactions</h1>
+                    <p class="header-subtitle">Automate your regular income and expenses</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="process-recurring-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M19,8L15,12H18A6,6 0 0,1 12,18C11,18 10.03,17.75 9.2,17.3L7.74,18.76C8.97,19.54 10.43,20 12,20A8,8 0 0,0 20,12H23M6,12A6,6 0 0,1 12,6C13,6 13.97,6.25 14.8,6.7L16.26,5.24C15.03,4.46 13.57,4 12,4A8,8 0 0,0 4,12H1L5,16L9,12" />
+                        </svg>
+                        Process Due
+                    </button>
+                    <button class="btn btn-primary" id="create-recurring-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                        </svg>
+                        New Recurring
+                    </button>
+                </div>
+            </header>
+
+            <!-- Recurring Overview -->
+            <section class="recurring-overview">
+                <div class="overview-cards" id="overview-cards">
+                    <div class="overview-card active-recurring skeleton">
+                        <div class="card-icon skeleton-icon"></div>
+                        <div class="card-content">
+                            <div class="skeleton-text skeleton-title"></div>
+                            <div class="skeleton-text skeleton-amount"></div>
+                            <div class="skeleton-text skeleton-subtitle"></div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card monthly-income skeleton">
+                        <div class="card-icon skeleton-icon"></div>
+                        <div class="card-content">
+                            <div class="skeleton-text skeleton-title"></div>
+                            <div class="skeleton-text skeleton-amount"></div>
+                            <div class="skeleton-text skeleton-subtitle"></div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card monthly-expenses skeleton">
+                        <div class="card-icon skeleton-icon"></div>
+                        <div class="card-content">
+                            <div class="skeleton-text skeleton-title"></div>
+                            <div class="skeleton-text skeleton-amount"></div>
+                            <div class="skeleton-text skeleton-subtitle"></div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card due-soon skeleton">
+                        <div class="card-icon skeleton-icon"></div>
+                        <div class="card-content">
+                            <div class="skeleton-text skeleton-title"></div>
+                            <div class="skeleton-text skeleton-amount"></div>
+                            <div class="skeleton-text skeleton-subtitle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overview-cards real-content" id="overview-cards-real" style="display: none;">
+                    <div class="overview-card active-recurring">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" />
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Active Recurring</h3>
+                            <p class="amount" id="active-recurring-count">0</p>
+                            <small class="card-subtitle">Total active schedules</small>
+                        </div>
+                    </div>
+
+                    <div class="overview-card monthly-income">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7L17,12H14V16H10V12H7L12,7Z" />
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Monthly Income</h3>
+                            <p class="amount" id="monthly-recurring-income">$0.00</p>
+                            <small class="card-subtitle">Recurring income per month</small>
+                        </div>
+                    </div>
+
+                    <div class="overview-card monthly-expenses">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,17L7,12H10V8H14V12H17L12,17Z" />
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Monthly Expenses</h3>
+                            <p class="amount" id="monthly-recurring-expenses">$0.00</p>
+                            <small class="card-subtitle">Recurring expenses per month</small>
+                        </div>
+                    </div>
+
+                    <div class="overview-card due-soon">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z" />
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Due Soon</h3>
+                            <p class="amount" id="due-soon-count">0</p>
+                            <small class="card-subtitle" id="due-soon-text">Next 7 days</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Due Transactions -->
+            <section class="due-transactions" id="due-transactions-section" style="display: none;">
+                <div class="section-card">
+                    <header class="section-header">
+                        <div>
+                            <h2>Due Transactions</h2>
+                            <p id="due-transactions-subtitle">Recurring transactions ready to be processed</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-outline" id="process-all-due-btn">Process All</button>
+                        </div>
+                    </header>
+
+                    <div class="due-transactions-list" id="due-transactions-list">
+                        <!-- Due transactions will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recurring Schedule -->
+            <section class="recurring-schedule">
+                <div class="section-card">
+                    <header class="section-header">
+                        <div>
+                            <h2>Recurring Schedule</h2>
+                            <p id="recurring-schedule-count">0 active recurring transactions</p>
+                        </div>
+                        <div class="header-actions">
+                            <div class="search-container">
+                                <input type="text" id="recurring-search" placeholder="Search recurring..."
+                                    class="search-input">
+                                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L20.71,20L19.29,21.42L13.73,15.44C12.59,16.41 11.11,17 9.5,17A6.5,6.5 0 0,1 3,10.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                                </svg>
+                            </div>
+                            <select id="recurring-filter" class="filter-select">
+                                <option value="all">All Recurring</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expenses</option>
+                                <option value="active">Active</option>
+                                <option value="paused">Paused</option>
+                            </select>
+                            <select id="frequency-filter" class="filter-select">
+                                <option value="all">All Frequencies</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </header>
+
+                    <div class="recurring-list" id="recurring-list">
+                        <!-- Recurring transactions will be populated here -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" id="recurring-empty-state" style="display: none;">
+                        <div class="empty-icon">🔄</div>
+                        <h3>No recurring transactions yet</h3>
+                        <p>Set up recurring income and expenses to automate your finances.</p>
+                        <button class="btn btn-primary"
+                            onclick="document.getElementById('create-recurring-btn').click()">
+                            Create First Recurring Transaction
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recurring Analytics -->
+            <section class="recurring-analytics">
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <header class="chart-header">
+                            <h3>Recurring Breakdown</h3>
+                            <p>Income vs Expenses distribution</p>
+                        </header>
+                        <div class="chart-container">
+                            <canvas id="recurringBreakdownChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <header class="chart-header">
+                            <h3>Frequency Analysis</h3>
+                            <p>Distribution by schedule frequency</p>
+                        </header>
+                        <div class="chart-container">
+                            <canvas id="frequencyAnalysisChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Schedule -->
+            <section class="upcoming-schedule">
+                <div class="section-card">
+                    <header class="section-header">
+                        <h2>Upcoming Schedule</h2>
+                        <p>Next 30 days of recurring transactions</p>
+                    </header>
+
+                    <div class="schedule-calendar" id="schedule-calendar">
+                        <!-- Calendar will be populated here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Create Recurring Modal -->
+    <div id="create-recurring-modal" class="modal" style="display: none;">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Create Recurring Transaction</h3>
+                <button class="modal-close" id="close-create-recurring-modal">&times;</button>
+            </div>
+            <form id="create-recurring-form" class="recurring-form">
+                <div class="form-section">
+                    <h4>Transaction Details</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="recurring-description">Description</label>
+                            <input type="text" id="recurring-description" name="description" required
+                                placeholder="e.g., Monthly Salary, Netflix Subscription">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recurring-amount">Amount ($)</label>
+                            <input type="number" id="recurring-amount" name="amount" step="0.01" min="0.01" required
+                                placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="recurring-type">Type</label>
+                            <select id="recurring-type" name="type" required>
+                                <option value="">Select type</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recurring-category">Category</label>
+                            <select id="recurring-category" name="category" required>
+                                <option value="">Select category</option>
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Bills & Utilities">Bills & Utilities</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>Schedule Settings</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="recurring-frequency">Frequency</label>
+                            <select id="recurring-frequency" name="frequency" required>
+                                <option value="">Select frequency</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="interval-group">
+                            <label for="recurring-interval">Every</label>
+                            <select id="recurring-interval" name="interval">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                            <span id="interval-text">month(s)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="day-selection-row" style="display: none;">
+                        <div class="form-group full-width">
+                            <label for="recurring-day-of-month">Day of Month</label>
+                            <select id="recurring-day-of-month" name="dayOfMonth">
+                                <option value="1">1st</option>
+                                <option value="2">2nd</option>
+                                <option value="3">3rd</option>
+                                <option value="4">4th</option>
+                                <option value="5">5th</option>
+                                <option value="10">10th</option>
+                                <option value="15">15th</option>
+                                <option value="20">20th</option>
+                                <option value="25">25th</option>
+                                <option value="30">30th</option>
+                                <option value="-1">Last day</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="recurring-start-date">Start Date</label>
+                            <input type="date" id="recurring-start-date" name="startDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recurring-end-date">End Date (Optional)</label>
+                            <input type="date" id="recurring-end-date" name="endDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>Additional Options</h4>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="recurring-auto-process" name="autoProcess" checked>
+                            <span class="checkmark"></span>
+                            Automatically process transactions when due
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="recurring-notifications" name="notifications" checked>
+                            <span class="checkmark"></span>
+                            Send notifications before processing
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recurring-notes">Notes (Optional)</label>
+                        <textarea id="recurring-notes" name="notes" rows="3"
+                            placeholder="Additional notes about this recurring transaction..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-create-recurring">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Create Recurring</span>
+                        <span class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Recurring Modal -->
+    <div id="edit-recurring-modal" class="modal" style="display: none;">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Edit Recurring Transaction</h3>
+                <button class="modal-close" id="close-edit-recurring-modal">&times;</button>
+            </div>
+            <form id="edit-recurring-form" class="recurring-form">
+                <input type="hidden" id="edit-recurring-id">
+
+                <div class="form-section">
+                    <h4>Transaction Details</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-recurring-description">Description</label>
+                            <input type="text" id="edit-recurring-description" name="description" required
+                                placeholder="e.g., Monthly Salary, Netflix Subscription">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-recurring-amount">Amount ($)</label>
+                            <input type="number" id="edit-recurring-amount" name="amount" step="0.01" min="0.01"
+                                required placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-recurring-type">Type</label>
+                            <select id="edit-recurring-type" name="type" required>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-recurring-category">Category</label>
+                            <select id="edit-recurring-category" name="category" required>
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Bills & Utilities">Bills & Utilities</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>Status & Options</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-recurring-status">Status</label>
+                            <select id="edit-recurring-status" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="paused">Paused</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-recurring-end-date">End Date (Optional)</label>
+                            <input type="date" id="edit-recurring-end-date" name="endDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="edit-recurring-auto-process" name="autoProcess">
+                            <span class="checkmark"></span>
+                            Automatically process transactions when due
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="edit-recurring-notifications" name="notifications">
+                            <span class="checkmark"></span>
+                            Send notifications before processing
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-recurring-notes">Notes</label>
+                        <textarea id="edit-recurring-notes" name="notes" rows="3"
+                            placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-recurring">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Update Recurring</span>
+                        <span class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Recurring Modal -->
+    <div id="delete-recurring-modal" class="modal" style="display: none;">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Delete Recurring Transaction</h3>
+                <button class="modal-close" id="close-delete-recurring-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this recurring transaction? This action cannot be undone.</p>
+                <div class="recurring-delete-info" id="recurring-delete-info">
+                    <!-- Recurring info will be populated here -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancel-delete-recurring">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-recurring">
+                    <span class="btn-text">Delete Recurring</span>
+                    <span class="btn-loader" style="display: none;">
+                        <div class="spinner"></div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Due Modal -->
+    <div id="process-due-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Process Due Transactions</h3>
+                <button class="modal-close" id="close-process-due-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>The following recurring transactions are due for processing:</p>
+                <div class="due-process-list" id="due-process-list">
+                    <!-- Due transactions will be populated here -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancel-process-due">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-process-due">
+                    <span class="btn-text">Process All</span>
+                    <span class="btn-loader" style="display: none;">
+                        <div class="spinner"></div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="js/recurring.js"></script>
+</body>
+
+</html>

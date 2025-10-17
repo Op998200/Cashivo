@@ -1,0 +1,22 @@
+{
+  "name": "cashivo",
+  "version": "1.0.0",
+  "description": "A modern, minimal finance tracker web app",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --host=localhost --open=/",
+    "serve": "node server.js",
+    "build": "echo 'Static site - no build needed'",
+    "start": "live-server --port=8080 --host=0.0.0.0"
+  },
+  "keywords": ["finance", "tracker", "expense", "income", "budget"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "express": "^4.18.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0"
+  }
+}
